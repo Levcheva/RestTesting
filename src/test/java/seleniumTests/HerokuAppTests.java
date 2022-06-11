@@ -110,6 +110,7 @@ public class HerokuAppTests {
     @Test
     public void disappearingElements() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/disappearing_elements");
+        WebElement galleryButton = driver.findElement(By.cssSelector("a[href='/gallery/']"));
 
         // while element is not visible -> refresh
         boolean displayed = false;
@@ -121,34 +122,6 @@ public class HerokuAppTests {
                 driver.navigate().refresh();
             }
         } while (!displayed);
-
-//         while (!driver.findElement(By.cssSelector("a[href='/gallery/']")).isDisplayed()) {
-//             driver.navigate().refresh();
-//         }
-
-
-        WebElement galleryButton = driver.findElement(By.cssSelector("a[href='/gallery/']"));
-
-
-
-//        if (galleryButton.isDisplayed()) {
-//            try {
-//                galleryButton.getText();
-//            } catch (org.openqa.selenium.StaleElementReferenceException e) {
-//                new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(galleryButton));
-//                galleryButton.getText();
-//            }
-//        }
-//        else {
-//            driver.navigate().refresh();
-//            driver.navigate().refresh();
-//
-//            galleryButton.getText();
-//        }
-
-
-//        wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf("a[href='/gallery/']")));
-
 
         Assert.assertEquals(galleryButton.getText(), "Gallery");
     }
