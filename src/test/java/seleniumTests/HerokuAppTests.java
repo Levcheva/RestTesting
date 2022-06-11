@@ -3,6 +3,7 @@ package seleniumTests;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -104,6 +105,52 @@ public class HerokuAppTests {
 
         }
         Assert.assertEquals(checkbox1State, checkbox1.isSelected());
+    }
+
+    @Test
+    public void disappearingElements() {
+        driver.get("https://admin:admin@the-internet.herokuapp.com/disappearing_elements");
+
+        // while element is not visible -> refresh
+        boolean displayed = false;
+        do {
+            try {
+                displayed = driver.findElement(By.cssSelector("a[href='/gallery/']")).isDisplayed();
+            } catch (NoSuchElementException e) {
+                System.out.println(e);
+                driver.navigate().refresh();
+            }
+        } while (!displayed);
+
+//         while (!driver.findElement(By.cssSelector("a[href='/gallery/']")).isDisplayed()) {
+//             driver.navigate().refresh();
+//         }
+
+
+        WebElement galleryButton = driver.findElement(By.cssSelector("a[href='/gallery/']"));
+
+
+
+//        if (galleryButton.isDisplayed()) {
+//            try {
+//                galleryButton.getText();
+//            } catch (org.openqa.selenium.StaleElementReferenceException e) {
+//                new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(galleryButton));
+//                galleryButton.getText();
+//            }
+//        }
+//        else {
+//            driver.navigate().refresh();
+//            driver.navigate().refresh();
+//
+//            galleryButton.getText();
+//        }
+
+
+//        wait.until(ExpectedConditions.refreshed(ExpectedConditions.stalenessOf("a[href='/gallery/']")));
+
+
+        Assert.assertEquals(galleryButton.getText(), "Gallery");
     }
 
     @Test
