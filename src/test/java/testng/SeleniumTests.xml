@@ -1,0 +1,9 @@
+<suite name="Suite1" verbose="1" parallel="classes">
+    <test name="Regression1">
+        <classes>
+            <class name="seleniumTests.FirstSeleniumTest"/>
+            <class name="seleniumTests.HerokuAppTests"/>
+        </classes>
+
+    </test>
+</suite>

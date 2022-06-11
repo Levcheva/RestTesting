@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
@@ -52,19 +55,28 @@ public class APITests {
 
     @Test
     public void likePost() throws JsonProcessingException {
+        // create an object of ActionsPOJO class and add value for the fields
         ActionsPOJO likePost = new ActionsPOJO();
         likePost.setAction("likePost");
-    given()
+    ValidatableResponse validatableResponse = given()
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + loginToken)
+            .and()
             .body(likePost)
             .when()
             .patch("/posts/4626")
             .then()
-            .body("post.id", equalTo(4626))
+            .assertThat().body("post.id", equalTo(4626))
             .log()
             .all();
 
+//        System.out.println("Extracted validatable response item is: ");
+//        System.out.println((String) validatableResponse.extract().path("post.user.username"));
+//        System.out.println((String) validatableResponse.extract().path("user.username"));
+
+        String myUser = validatableResponse.extract().path("user.username");
+
+        Assert.assertEquals(myUser, "test52");
     }
 
     @Test
@@ -78,11 +90,16 @@ public class APITests {
                 .when()
                 .post("/posts/4626/comment")
                 .then()
-                .body("content", equalTo("Comment post content"))
+                .assertThat().body("content", equalTo("Comment post content"))
+                .assertThat().body("user.id", equalTo(2393))
                 .log()
                 .all()
                 .statusCode(201);
-    }
+
+//        Integer comentID = JsonPath.parse(commentResponseBody).read("$.id");
+
+
+            }
 
     @Test
     public void getPosts() {
@@ -99,6 +116,26 @@ public class APITests {
                 .all()
                 .statusCode(200);
 
+        ArrayList<Integer> postIds = validatableResponse.extract().path("id");
+        Assert.assertNotEquals(postIds, null);
+        for (int element : postIds) {
+            System.out.println(element);
+        }
+    }
+
+    @Test
+    public void deleteComment() throws JsonProcessingException {
+        commentPost();
+
+given()
+        .header("Content-Type", "application/json")
+        .header("Authorization", "Bearer " + loginToken)
+        .when()
+        .delete("/posts/4622/comments/")
+        .then()
+        //.statusCode(200)
+        .log()
+        .all();
     }
 
 }
