@@ -38,7 +38,7 @@ public class HerokuAppTests {
     }
 
     @Test
-    public void addRemoveElements() throws InterruptedException {
+    public void addRemoveElements() {
         driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
 
         List<WebElement> elementsContainer = driver.findElements(By.xpath("//div[@id='elements']/descendant::*"));
@@ -52,20 +52,18 @@ public class HerokuAppTests {
         elementsContainer = driver.findElements(By.xpath("//div[@id='elements']/descendant::*"));
 
         Assert.assertEquals(elementsContainer.size(), 2);
-        Thread.sleep(1500);
 //        WebElement deleteButton = driver.findElement(By.cssSelector(".added-manually"));
     }
 
     @Test
-    public void basicAuth() throws InterruptedException {
+    public void basicAuth() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/basic_auth");
-        Thread.sleep(1500);
         WebElement message = driver.findElement(By.xpath("//div[@class='example']/p"));
         Assert.assertEquals(message.getText(), "Congratulations! You must have the proper credentials.");
     }
 
     @Test
-    public void dragAndDrop() throws InterruptedException {
+    public void dragAndDrop() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/drag_and_drop");
 
         WebElement elementA = driver.findElement(By.xpath("//div[@id='column-a']"));
@@ -75,12 +73,11 @@ public class HerokuAppTests {
 
         actions.dragAndDrop(elementA, elementB).perform();
 //        To do assert
-        Thread.sleep(1000);
 
     }
 
     @Test
-    public void contextMenu() throws InterruptedException {
+    public void contextMenu() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/drag_and_drop");
 
         WebElement contextBox = driver.findElement(By.id("hot-spot"));
@@ -90,11 +87,10 @@ public class HerokuAppTests {
         String alertText = alert.getText();
         Assert.assertEquals(alertText, "You selected a context menu");
         alert.dismiss();
-        Thread.sleep(1000);
     }
 
     @Test
-    public void checkBoxes() throws InterruptedException {
+    public void checkBoxes() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/checkboxes");
         WebElement checkbox1 = driver.findElement(By.xpath("//form[@id='checkboxes']/input[1]"));
         WebElement checkbox2 = driver.findElement(By.xpath("//form[@id='checkboxes']/input[2]"));
@@ -108,47 +104,36 @@ public class HerokuAppTests {
 
         }
         Assert.assertEquals(checkbox1State, checkbox1.isSelected());
-        Thread.sleep(1500);
     }
 
     @Test
-    public void hovers() throws InterruptedException {
+    public void hovers() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/hovers");
         WebElement image1 = driver.findElement(By.xpath("(//div[@class='figure']/img)[1]"));
         WebElement viewProfileLink = driver.findElement(By.cssSelector("a[href='/users/1']"));
         Actions action = new Actions(driver);
         action.moveToElement(image1).perform();
-        Thread.sleep(1000);
         Assert.assertTrue(viewProfileLink.isDisplayed());
     }
 
     @Test
-    public void multipleWindows() throws InterruptedException {
+    public void multipleWindows() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/windows");
         WebElement clickHereLink = driver.findElement(By.cssSelector("a[href='/windows/new']"));
         clickHereLink.click();
-        Thread.sleep(1000);
-
         String parentWindow= driver.getWindowHandle();
-
         Set<String> allWindows = driver.getWindowHandles();
         for(String curWindow : allWindows){
             driver.switchTo().window(curWindow);
         }
-        Thread.sleep(1000);
         driver.switchTo().window(parentWindow);
-        Thread.sleep(1000);
     }
 
     @Test
-    public void redirectLink() throws InterruptedException {
+    public void redirectLink() {
         driver.get("https://admin:admin@the-internet.herokuapp.com/redirector");
-        Thread.sleep(1000);
-
         WebElement hereLink = driver.findElement(By.cssSelector("#redirect"));
         hereLink.click();
-        Thread.sleep(1000);
-
         String expectedURL = "https://the-internet.herokuapp.com/status_codes";
         String actualURL = driver.getCurrentUrl();
         Assert.assertEquals(actualURL, expectedURL);
