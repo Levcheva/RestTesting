@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -75,6 +76,16 @@ public class HerokuAppTests {
         actions.dragAndDrop(elementA, elementB).perform();
 //        To do assert
 
+    }
+
+    @Test
+    public void dropdown() {
+        driver.get("https://admin:admin@the-internet.herokuapp.com/dropdown");
+        WebElement testDropDown = driver.findElement(By.id("dropdown"));
+        Select dropdown = new Select(testDropDown);
+        dropdown.selectByValue("1");
+        WebElement selectedOption = driver.findElement(By.xpath("//select[@id='dropdown']/option[@selected='selected']"));
+        Assert.assertEquals(selectedOption.getText(), "Option 1");
     }
 
     @Test
